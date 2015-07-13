@@ -1,7 +1,9 @@
 package com.thimes.notifications;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -51,6 +53,13 @@ public class MainActivity extends ActionBarActivity {
                         .setContentTitle("Title")
                         .setContentText("Content Text");
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        Intent followIntent = new Intent(this, SecondaryActivity.class);
+
+        PendingIntent followPendingIntent = PendingIntent.getActivity(this, 0, followIntent, 0);
+
+        mBuilder.setContentIntent(followPendingIntent);
+
         mNotificationManager.notify(mId, mBuilder.build());
     }
 }
