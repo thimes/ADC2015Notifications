@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,9 +58,17 @@ public class MainActivity extends ActionBarActivity {
 
         Intent followIntent = new Intent(this, SecondaryActivity.class);
 
-        PendingIntent followPendingIntent = PendingIntent.getActivity(this, 0, followIntent, 0);
-
-        mBuilder.setContentIntent(followPendingIntent);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        // Adds the back stack for the Intent (but not the Intent itself)
+        stackBuilder.addParentStack(MainActivity.class);
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(followIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
 
         mNotificationManager.notify(mId, mBuilder.build());
     }
