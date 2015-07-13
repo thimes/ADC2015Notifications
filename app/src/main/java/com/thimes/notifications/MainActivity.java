@@ -51,7 +51,8 @@ public class MainActivity extends ActionBarActivity {
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(android.R.drawable.stat_notify_sync)
                         .setContentTitle("Title")
-                        .setContentText("Content Text");
+                        .setContentText("Content Text")
+                        .setAutoCancel(true);
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent followIntent = new Intent(this, SecondaryActivity.class);
