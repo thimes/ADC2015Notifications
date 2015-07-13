@@ -70,6 +70,10 @@ public class MainActivity extends ActionBarActivity {
                 );
         mBuilder.setContentIntent(resultPendingIntent);
 
+        Intent deleteServiceIntent = new Intent(this, DeleteIntentService.class);
+
+        mBuilder.setDeleteIntent(PendingIntent.getService(this, 0, deleteServiceIntent, 0));
+
         mNotificationManager.notify(mId, mBuilder.build());
     }
 }
