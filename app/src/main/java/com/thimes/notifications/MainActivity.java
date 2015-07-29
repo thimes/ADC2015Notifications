@@ -45,12 +45,47 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void showNotification() {
-        NotificationCompat.Builder mBuilder =
+        final NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(android.R.drawable.stat_notify_sync)
-                        .setContentTitle("Title")
-                        .setContentText("Content Text");
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        .setContentTitle("Download")
+                        .setProgress(0, 0, true)
+                        .setContentText("Starting download...");
+        final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mId, mBuilder.build());
+
+
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        int incr;
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                        }
+
+                        // Do the "lengthy" operation 20 times
+                        for (incr = 0; incr <= 100; incr += 5) {
+                            // Sleeps the thread, simulating an operation that takes time
+                            try {
+                                Thread.sleep(400);
+                            } catch (InterruptedException e) {
+                            }
+
+                            // Sets the progress indicator to a max value, the current completion percentage, and "determinate" state
+                            mBuilder.setProgress(100, incr, false).setContentText("Progress: " + incr + "%");
+                            // Displays the progress bar for the first time.
+                            mNotificationManager.notify(mId, mBuilder.build());
+                        }
+
+                        // When the loop is finished, updates the notification
+                        mBuilder.setContentText("Download complete")
+                                // Removes the progress bar
+                                .setProgress(0, 0, false);
+                        mNotificationManager.notify(mId, mBuilder.build());
+                    }
+                }
+        ).start(); // Starts the thread by calling the run() method in its Runnable
     }
 }
