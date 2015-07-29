@@ -45,12 +45,19 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void showNotification() {
-        NotificationCompat.Builder mBuilder =
+        final NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(android.R.drawable.stat_notify_sync)
+                        .setSmallIcon(android.R.drawable.stat_notify_sync) // 36dp max
                         .setContentTitle("Title")
-                        .setContentText("Content Text");
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(mId, mBuilder.build());
+                        .setContentText("Content Text")
+                        .setVibrate(new long[0])
+                        .setPriority(NotificationCompat.PRIORITY_HIGH);
+        findViewById(R.id.hello).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(mId, mBuilder.build());
+            }
+        }, 2000);
     }
 }
