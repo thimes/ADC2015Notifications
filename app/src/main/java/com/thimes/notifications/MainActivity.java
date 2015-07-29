@@ -1,15 +1,17 @@
 package com.thimes.notifications;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RemoteViews;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -53,20 +55,52 @@ public class MainActivity extends ActionBarActivity {
     public void showNotification() {
         Bitmap mySmallBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_stat_2);
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(android.R.drawable.stat_notify_sync)
-                        .setContentTitle("Title")
-                        .setContentText("Content Text")
-                        .setDefaults(NotificationCompat.DEFAULT_ALL)
-                        .setNumber(4)
-//                        .setTicker("Hey, this is happening!!!") // - notice what's up? :) - heads up instead
-                        .setAutoCancel(true)
-                        .setWhen(System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS)
-                        .setLargeIcon(mySmallBitmap)
-                        .setSmallIcon(R.drawable.ic_stat_3)
-                ;
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(mId, mBuilder.build());
+        mNotificationManager.notify(mId, buildCustomNotification());
     }
+
+    @SuppressLint("NewApi") // only suppressing it because I know I've checked for it
+    private Notification buildCustomNotification() {
+        Notification n = new Notification();
+
+        n.icon = R.drawable.ic_stat_5;
+        n.when = System.currentTimeMillis();
+//        n.defaults = Notification.DEFAULT_ALL;
+        n.tickerText = "New custom notification has arrived!";
+
+        Bitmap myBigBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.custom_image);
+
+        RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.rich_notification);
+
+        contentView.setImageViewBitmap(R.id.imageL, myBigBitmap);
+        contentView.setImageViewBitmap(R.id.imageR, myBigBitmap);
+        contentView.setTextViewText(R.id.title, "Hi Notification!");
+        contentView.setTextViewText(R.id.text, "Not so bad...right?");
+
+        n.contentView = contentView;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            RemoteViews expandedContentView = buildExpandedRemoteViews();
+            n.bigContentView = expandedContentView;
+        }
+
+        return n;
+    }
+
+    private RemoteViews buildExpandedRemoteViews() {
+        RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.rich_notification_expanded);
+
+        remoteViews.setImageViewResource(R.id.big_cat, R.drawable.big_image);
+        remoteViews.setImageViewResource(R.id.cat_tl, R.drawable.cat1);
+        remoteViews.setImageViewResource(R.id.cat_tm, R.drawable.cat2);
+        remoteViews.setImageViewResource(R.id.cat_tr, R.drawable.cat3);
+        remoteViews.setImageViewResource(R.id.cat_ml, R.drawable.cat4);
+        remoteViews.setImageViewResource(R.id.cat_mr, R.drawable.cat5);
+        remoteViews.setImageViewResource(R.id.cat_bl, R.drawable.cat6);
+        remoteViews.setImageViewResource(R.id.cat_bm, R.drawable.cat7);
+        remoteViews.setImageViewResource(R.id.cat_br, R.drawable.cat8);
+
+        return remoteViews;
+    }
+
 }
