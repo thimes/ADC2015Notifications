@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,8 +20,11 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
         showNotification();
     }
 
@@ -54,8 +58,13 @@ public class MainActivity extends ActionBarActivity {
                         .setSmallIcon(android.R.drawable.stat_notify_sync)
                         .setContentTitle("Title")
                         .setContentText("Content Text")
+                        .setDefaults(NotificationCompat.DEFAULT_ALL)
                         .setNumber(4)
+//                        .setTicker("Hey, this is happening!!!") // - notice what's up? :) - heads up instead
+                        .setAutoCancel(true)
+                        .setWhen(System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS)
                         .setLargeIcon(mySmallBitmap)
+                        .setSmallIcon(R.drawable.ic_stat_3)
                 ;
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mId, mBuilder.build());
