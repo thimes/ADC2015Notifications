@@ -47,6 +47,9 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void showNotification() {
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle.bigText("It's out,it's awesome, and we totally want it, you should totally want it, go get it, and play those cards in your favorite decks!!!!");
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(android.R.drawable.stat_notify_sdcard)
@@ -54,6 +57,8 @@ public class MainActivity extends ActionBarActivity {
                         .setContentText("Old Hollywood is available for purchase!")
                         .setContentIntent(getContentPendingIntent())
                         .addAction(android.R.drawable.stat_notify_sync, "Get it!", getSyncPendingIntent())
+                        .extend(new NotificationCompat.WearableExtender().addAction(getWearableOnlyAction()))
+                        .setStyle(bigTextStyle)
                         .setAutoCancel(true);
         NotificationManagerCompat mNotificationManager = NotificationManagerCompat.from(this);
 
@@ -62,6 +67,13 @@ public class MainActivity extends ActionBarActivity {
 
     private PendingIntent getSyncPendingIntent() {
         return PendingIntent.getActivity(this, 1, new Intent(this, SyncActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private NotificationCompat.Action getWearableOnlyAction() {
+        Intent actionIntent = new Intent(this, VoicemailService.class);
+        PendingIntent actionPendingIntent = PendingIntent.getService(this, 0, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        return new NotificationCompat.Action.Builder(android.R.drawable.stat_notify_voicemail, "Leave voicemail Reminder", actionPendingIntent).build();
     }
 
     private PendingIntent getContentPendingIntent() {
