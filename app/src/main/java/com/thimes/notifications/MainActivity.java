@@ -2,6 +2,8 @@ package com.thimes.notifications;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -45,11 +47,16 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void showNotification() {
+        Bitmap mySmallBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_stat_2);
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(android.R.drawable.stat_notify_sync)
                         .setContentTitle("Title")
-                        .setContentText("Content Text");
+                        .setContentText("Content Text")
+                        .setNumber(4)
+                        .setLargeIcon(mySmallBitmap)
+                ;
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mId, mBuilder.build());
     }
