@@ -45,19 +45,25 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void showNotification() {
-        final NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(android.R.drawable.stat_notify_sync) // 36dp max
-                        .setContentTitle("Title")
-                        .setContentText("Content Text")
-                        .setVibrate(new long[0])
-                        .setPriority(NotificationCompat.PRIORITY_HIGH);
         findViewById(R.id.hello).postDelayed(new Runnable() {
             @Override
             public void run() {
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(mId, mBuilder.build());
+                buildNotification("Public", NotificationCompat.VISIBILITY_PUBLIC);
+                buildNotification("Private", NotificationCompat.VISIBILITY_PRIVATE);
+                buildNotification("Secret", NotificationCompat.VISIBILITY_SECRET);
             }
-        }, 2000);
+        }, 10000);
+    }
+
+    private void buildNotification(String title, int visibility) {
+        final NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(android.R.drawable.stat_notify_sync) // 36dp max
+                        .setContentTitle(title)
+                        .setContentText("Content Text")
+                        .setVisibility(visibility)
+                ;
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(visibility + 4, mBuilder.build());
     }
 }
