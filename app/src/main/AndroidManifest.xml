@@ -19,6 +19,8 @@
         <activity
             android:name=".SecondaryActivity"
             android:label="@string/title_activity_notification_follow" >
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value=".MainActivity" />
         </activity>
     </application>
 
