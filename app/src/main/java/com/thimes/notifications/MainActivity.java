@@ -8,13 +8,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RemoteViews;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private int mId = 17;
 
@@ -56,7 +57,12 @@ public class MainActivity extends ActionBarActivity {
         Bitmap mySmallBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_stat_2);
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(mId, buildCustomNotification());
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.ic_stat_3)
+               .setContentTitle("New big icon")
+               .setContentText("check it out!")
+               .setLargeIcon(mySmallBitmap);
+        mNotificationManager.notify(mId, builder.build());
     }
 
     @SuppressLint("NewApi") // only suppressing it because I know I've checked for it
